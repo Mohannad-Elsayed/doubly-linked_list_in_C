@@ -14,62 +14,12 @@ TODO
 
     //circular
 
-    prototypes in a .h file
+    ?prototypes in a .h file
     generic using void pointers
     a proper API
     licence
 
-NodeType
-ListSize
-node
-list
 
-_comp
-_traversfunction
-_printElement
-_Val
-__
-_find
-_count
-_insert
-_swap
-_removeNode
-
-makeList
-clear
-jump_headward
-jump_tailward
-next
-prev
-at
-head
-tail
-val
-size
-empty
-
-addHead
-addTail
-insert
-append
-prepend
-
-removeHead
-removeTail
-erase
-eraseAt
-removeVal
-
-find
-count
-
-traverse_headward
-traverse_tailward
-reverse
-fill
-copy
-swap
-printAllElements
 */
 
 #include <stdio.h>
@@ -94,16 +44,6 @@ typedef struct list {
 #define smaller(a, b) a < b
 */
 
-/// @brief helper function compares two elements of type `NodeType`
-/// @return `1` if element 1 greater than element 2, `0` if both are equal, `-1` if element 1 is smaller than element 2
-int _comp(NodeType *_E1, NodeType *_E2){
-    if (equal(*_E1, *_E2))
-        return 0;
-    else if (greater(*_E1, *_E2))
-        return 1;
-    else 
-        return -1;
-}
 /// @brief helper function to traverse list elements
 /// @param _E 
 void _traverseFunction(NodeType *_E){
@@ -113,6 +53,16 @@ void _traverseFunction(NodeType *_E){
 /// @param _E pointer to the element
 void _printElement(NodeType *_E){
     printf("%d", *_E);
+}
+/// @brief helper function compares two elements of type `NodeType`
+/// @return `1` if element 1 greater than element 2, `0` if both are equal, `-1` if element 1 is smaller than element 2
+int _comp(NodeType *_E1, NodeType *_E2){
+    if (equal(*_E1, *_E2))
+        return 0;
+    else if (greater(*_E1, *_E2))
+        return 1;
+    else 
+        return -1;
 }
 /// @brief helper function to hold the filling value in a static place in memory 
 /// @param val a pointer to the value to be filled
@@ -144,8 +94,8 @@ int _count(NodeType *_E){
 /// @brief helper function to allocate, insert a node after a specified node
 /// @param _pNode a pointer to the current node
 /// @param _E the element to be inserted
-/// @return `1` in case of successful insertion, `0` otherwise
-int _insert(Node *_pNode, NodeType *_E){
+/// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
+ListIterator _insert(Node *_pNode, NodeType *_E){
     Node *__pNode = (Node *)malloc(sizeof(Node));
     if (__pNode){
         __pNode -> _val = *_E;
@@ -153,9 +103,9 @@ int _insert(Node *_pNode, NodeType *_E){
         __pNode -> _next = _pNode -> _next;
         _pNode -> _next -> _prev = __pNode;
         _pNode -> _next = __pNode;
-        return 1;
+        return __pNode;
     }
-    return 0;
+    return NULL;
 }
 /// @brief a helper function swaps two elements
 /// @param _E1 pointer to the first element
@@ -210,33 +160,31 @@ ListIterator jump_headward(ListIterator _it, unsigned _step){
 /// @brief skips elements in the list to the head
 /// @param _it an iterator to the current element
 /// @param _step number of elements to be skipeed
-/// @return `1` if the final element is a valid element in the list, `0` otherwise
-int jump_tailward(ListIterator *_it, unsigned _step){
-    while((*_it) && _step--)
-        (*_it) = (*_it) -> _prev;
-    return *_it != NULL;
+/// @return an iterator to the element if it's a valid element in the list, `NULL` otherwise
+ListIterator jump_tailward(ListIterator _it, unsigned _step){
+    while(_it && _step--)
+        _it = _it -> _prev;
+    return _it;
 }
 /// @brief advances the iterator to the tail by 1 step
 /// @param _it an iterator to the current element
-/// @return `1` on success, `0` on failure
-int next(ListIterator *_it){
-    if (*_it)
-        return (*_it) = (*_it) -> _next, 1;
-    return 0;
+/// @return an iterator to the element if it's a valid element in the list, `NULL` otherwise
+ListIterator next(ListIterator _it){
+    if (_it)
+        return _it -> _next;
 }
 /// @brief advances the iterator to the head by 1 step
 /// @param _it an iterator to the current element
-/// @return `1` on success, `0` on failure
-int prev(ListIterator *_it){
-    if (*_it)
-        return (*_it) = (*_it) -> _prev, 1;
-    return 0;
+/// @return an iterator to the element if it's a valid element in the list, `NULL` otherwise
+ListIterator prev(ListIterator _it){
+    if (_it)
+        return _it -> _prev;
 }
 /// @brief get an iterator pointing at the element in the specified index, including negative indexing
 /// @attention `0` is the first element at the head, `-1` is the last element at the tail, `-2` is second to last, ...
 /// @param _list a pointer to the list 
 /// @param _index index of the element `[-size, size-1]` inclusive
-/// @return an iterator points at the element at the index
+/// @return an iterator points at the element at the index, `NULL` if it's out-of-boundary
 ListIterator at(List *_list, signed _index){
     if (_index < 0)
         _index += _list -> _size;
@@ -245,12 +193,12 @@ ListIterator at(List *_list, signed _index){
     return jump_headward(head(_list), _index);
 }
 /// @param _list a pointer to the list
-/// @return returns an iterator to the Head element in the list
+/// @return an iterator to the Head element in the list
 ListIterator head(List *_list){
     return _list -> _head;
 }
 /// @param _list a pointer to the list
-/// @return returns an iterator to the Tail element in the list
+/// @return an iterator to the Tail element in the list
 ListIterator tail(List *_list){
     return _list -> _tail;
 }
@@ -271,7 +219,7 @@ int empty(List *_list){
 /// @brief appends an element to the start (Head side) of the list
 /// @param _list a pointer to the list
 /// @param val the value to be added
-/// @return iterator to the element in success addition, `NULL` in failure
+/// @return an iterator to the element in success addition, `NULL` in failure
 // TODO make NodeType reference type
 ListIterator addHead(List *_list, NodeType val){
     Node *_pNode = (ListIterator)malloc(sizeof(Node));
@@ -293,7 +241,7 @@ ListIterator addHead(List *_list, NodeType val){
 /// @brief appends an element to the end (Tail side) of the list
 /// @param _list a pointer to the list
 /// @param val the value to be added
-/// @return iterator to the element in success addition, `NULL` in failure
+/// @return an iterator to the element in success addition, `NULL` in failure
 // TODO make NodeType reference type
 ListIterator addTail(List *_list, NodeType val){
     Node *_pNode = (ListIterator)malloc(sizeof(Node));
@@ -316,8 +264,8 @@ ListIterator addTail(List *_list, NodeType val){
 /// @param _list a pointer to the list
 /// @param _element element to be inserted
 /// @param _index the index, must be [0, size -1] inclusive
-/// @return `1` in case of successful insertion, `0` otherwise
-int insert(List *_list, NodeType _element, ListSize _index){
+/// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
+ListIterator insert(List *_list, NodeType _element, ListSize _index){
     if (_index >= _list -> _size)
         return 0;
     if (_index == 0)
@@ -325,11 +273,12 @@ int insert(List *_list, NodeType _element, ListSize _index){
     Node *_pNode = _list -> _head;
     while(--_index)
         _pNode = _pNode -> _next;
-    if (_insert(_pNode, &_element)){
+    _pNode = _insert(_pNode, &_element);
+    if (_pNode){
         _list -> _size++;
-        return 1;
+        return _pNode;
     }
-    return 0;
+    return NULL;
 }
 /// @brief append all elements in `source` to the Tail of `destination`
 /// @param source
@@ -353,7 +302,7 @@ void prepend(List *source, List *destination){
 }
 /// @brief erases the Head element in the list (the left most element)
 /// @param _list a pointer the the list
-/// @returns iterator to the new HEAD in success removal, `NULL` if the list is empty before or after the removal
+/// @returns an iterator to the new HEAD in success removal, `NULL` if the list is empty before or after the removal
 ListIterator eraseHead(List *_list){
     if (!_list -> _size){
         _list -> _head = _list -> _tail = NULL;
@@ -370,7 +319,7 @@ ListIterator eraseHead(List *_list){
 }
 /// @brief erases the Tail element in the list (the right most element)
 /// @param _list a pointer the the list
-/// @returns iterator to the new TAIL in success removal, `NULL` if the list is empty before or after the removal
+/// @returns an iterator to the new TAIL in success removal, `NULL` if the list is empty before or after the removal
 ListIterator eraseTail(List *_list){
     if (!_list -> _size){
         _list -> _head = _list -> _tail = NULL;
@@ -404,7 +353,7 @@ ListIterator eraseAt(List *_list, signed _index){
 /// @param _list a pointer to the list
 /// @param val the value to be erased 
 /// @return number of elements erased
-int eraseVal(List *_list, NodeType val){
+ListSize eraseVal(List *_list, NodeType val){
     Node *_pNode = _list -> _head;
     int _flag = 0;
     while (_pNode){
@@ -461,17 +410,17 @@ ListSize traverse_tailward(List *_list, int _pfun(NodeType *_E)){
     return result;
 }
 /// @brief reverse the list in-place
-/// @param _list 
+/// @param _list a pointer to the list
 void reverse(List *_list){
-    Node *_F = _list -> _head, *_B = _list -> _tail;
+    Node *_H = _list -> _head, *_T = _list -> _tail;
     ListSize _i = 0, _limit = _list -> _size / 2;
-    for (;_F && _B && _i < _limit; _i++){
-        _swap(&_F -> _val, &_B -> _val);
-        _F = _F -> _next;
-        _B = _B -> _prev;
+    for (;_H && _T && _i < _limit; _i++){
+        _swap(&_H -> _val, &_T -> _val);
+        _H = _H -> _next;
+        _T = _T -> _prev;
     }
 }
-/// @brief make all list elements equal to one element
+/// @brief make all list elements equal to a value
 /// @param _list a pointer to the list
 /// @param val value to make all elements equal to
 void fill(List *_list, NodeType val){
@@ -506,33 +455,16 @@ void swap(ListIterator _it1, ListIterator _it2){
     _swap(&_it1 -> _val, &_it2 -> _val);
 }
 
-
-//// !for test
-int printe(NodeType *_){
-    printf("%d ", *_);
-}
-
-
+//!----------------------------------
 int main(){
-    List list1, list2;
-    makeList(&list1);
-    makeList(&list2);
-
-    for (int i = 1; i<10; i++){
+    List list1;
+    create(&list1);
+    for (int i = 0; i<19 ;i++){
         addTail(&list1, i);
+        if (i%3==0)
+            reverse(&list1);
+        printAllElements(&list1, " ");
+        printf("\n--------%d------\n", i);
     }
-    // printAllElements(&list1, "\n");
-    insert(&list1, 999999, 3);
-    addTail(&list1, 1222);
-    addTail(&list1, 1212);
-
-    printf("---------------------------- %lld\n", size(&list1));
-    printAllElements(&list1, "\n");
-    ListIterator h = head(&list1);
-    
-
-    
-    // traverse_tailward(&list1, printe);
-
     return 0;
 }
