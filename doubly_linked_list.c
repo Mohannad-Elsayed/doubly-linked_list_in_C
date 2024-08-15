@@ -1,101 +1,41 @@
-/*
-TODO
+#ifndef DOUBLY_LINKED_LIST_c
+#define DOUBLY_LINKED_LIST_c 1
 
-    ?swap
-    ?reverse list
-    ?find
-    ?count
-    ?insert
-    ?traverse-headward, tailward
-    ?iterators, front, back, next, prev, jump
-    ?indexing, negative indexing
-    //inbetween pointer to speed up insertion
-    ?head, tail naming
+#include "doubly_linked_list.h"
 
-    //circular
-
-    ?prototypes in a .h file
-    generic using void pointers
-    a proper API
-    licence
-
-
-*/
-
-#include <stdio.h>
-#include <malloc.h>
-#include "types.h"
-/*
-typedef int NodeType;
-typedef unsigned long long ListSize;
-typedef struct node {
-    NodeType _val;
-    struct node *_next, *_prev;
-} Node;
-typedef Node* ListIterator;
-typedef struct list {
-    Node *_head;
-    Node *_tail;
-    ListSize _size;
-} List;
-
-#define equal(a,b) (a) == (b)
-#define greater(a, b) a > b
-#define smaller(a, b) a < b
-*/
-
-/// @brief helper function to traverse list elements
-/// @param _E 
-void _traverseFunction(NodeType *_E){
-    printf("%d ", *_E);
-}
-/// @brief helper function to print an element of type `NodeType`
-/// @param _E pointer to the element
-void _printElement(NodeType *_E){
-    printf("%d", *_E);
-}
-/// @brief helper function compares two elements of type `NodeType`
+/// a helper variable to hold filling value 
+ElementType __Val;
+/// @brief helper function compares two elements of type `ElementType`
 /// @return `1` if element 1 greater than element 2, `0` if both are equal, `-1` if element 1 is smaller than element 2
-int _comp(NodeType *_E1, NodeType *_E2){
-    if (equal(*_E1, *_E2))
+int _comp(ElementType *_E1, ElementType *_E2){
+    if (equal(_E1, _E2))
         return 0;
-    else if (greater(*_E1, *_E2))
+    else if (greater(_E1, _E2))
         return 1;
     else 
         return -1;
 }
-/// @brief helper function to hold the filling value in a static place in memory 
-/// @param val a pointer to the value to be filled
-/// @return a pointer to the place in memory in which the filling value is stored
-// TODO refactor
-NodeType* _Val(NodeType *val){
-    static NodeType *_val = NULL;
-    if (_val) 
-        return _val;
-    _val = val;
-    return _val;
-}
 /// @brief helper function to make a list element's value equal to a given value
 /// @param _E the list element's value
-int _makeEqualWithVal(NodeType *_E){
-    *_E = *_Val((NodeType*)0);
+int _makeEqualWithVal(ElementType *_E){
+    *_E = __Val;
     return 0;
 }
 /// @brief helper function for function `find()` to compare two elements
 /// @return `1` if two elements are equal, `0` otherwise
-int _find(NodeType *_E){
-    return !_comp(_Val((NodeType*)0), _E);
+int _find(ElementType *_E){
+    return !_comp(&__Val, _E);
 }
 /// @brief helper function for function `find()` to compare two elements
 /// @return `1` if two elements are equal, `0` otherwise
-int _count(NodeType *_E){
-    return !_comp(_Val((NodeType*)0), _E);
+int _count(ElementType *_E){
+    return !_comp(&__Val, _E);
 }
 /// @brief helper function to allocate, insert a node after a specified node
 /// @param _pNode a pointer to the current node
 /// @param _E the element to be inserted
 /// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
-ListIterator _insert(Node *_pNode, NodeType *_E){
+ListIterator _insert(Node *_pNode, ElementType *_E){
     Node *__pNode = (Node *)malloc(sizeof(Node));
     if (__pNode){
         __pNode -> _val = *_E;
@@ -110,8 +50,8 @@ ListIterator _insert(Node *_pNode, NodeType *_E){
 /// @brief a helper function swaps two elements
 /// @param _E1 pointer to the first element
 /// @param _E2 pointer to the second element
-void _swap(NodeType *_E1, NodeType *_E2){
-    NodeType _T = *_E1;
+void _swap(ElementType *_E1, ElementType *_E2){
+    ElementType _T = *_E1;
     *_E1 = *_E2;
     *_E2 = _T;
 }
@@ -205,7 +145,7 @@ ListIterator tail(List *_list){
 /// @param _it an iterator to the current element
 /// @return the value pointed to by the iterator
 /// @attention the function doesn't check the iterator's validity
-NodeType val(ListIterator _it){
+ElementType val(ListIterator _it){
     return _it -> _val;
 }
 /// @return returns the number of elements in the list
@@ -220,8 +160,8 @@ int empty(List *_list){
 /// @param _list a pointer to the list
 /// @param val the value to be added
 /// @return an iterator to the element in success addition, `NULL` in failure
-// TODO make NodeType reference type
-ListIterator addHead(List *_list, NodeType val){
+// TODO make ElementType reference type
+ListIterator addHead(List *_list, ElementType val){
     Node *_pNode = (ListIterator)malloc(sizeof(Node));
     if (_pNode){
         Node *__pNode = _list -> _head;
@@ -242,8 +182,8 @@ ListIterator addHead(List *_list, NodeType val){
 /// @param _list a pointer to the list
 /// @param val the value to be added
 /// @return an iterator to the element in success addition, `NULL` in failure
-// TODO make NodeType reference type
-ListIterator addTail(List *_list, NodeType val){
+// TODO make ElementType reference type
+ListIterator addTail(List *_list, ElementType val){
     Node *_pNode = (ListIterator)malloc(sizeof(Node));
     if (_pNode){
         Node *__pNode = _list -> _tail;
@@ -265,7 +205,7 @@ ListIterator addTail(List *_list, NodeType val){
 /// @param _element element to be inserted
 /// @param _index the index, must be [0, size -1] inclusive
 /// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
-ListIterator insert(List *_list, NodeType _element, ListSize _index){
+ListIterator insert(List *_list, ElementType _element, ListSize _index){
     if (_index >= _list -> _size)
         return 0;
     if (_index == 0)
@@ -353,11 +293,11 @@ ListIterator eraseAt(List *_list, signed _index){
 /// @param _list a pointer to the list
 /// @param val the value to be erased 
 /// @return number of elements erased
-ListSize eraseVal(List *_list, NodeType val){
+ListSize eraseVal(List *_list, ElementType val){
     Node *_pNode = _list -> _head;
     int _flag = 0;
     while (_pNode){
-        NodeType *_pNodeType = &(_pNode -> _val);
+        ElementType *_pNodeType = &(_pNode -> _val);
         if (!_comp(_pNodeType, &val)){
             _pNode = _eraseNode(_list, _pNode);
             _flag++;
@@ -371,23 +311,23 @@ ListSize eraseVal(List *_list, NodeType val){
 /// @param _list a pointer to the list
 /// @param _element element to be found
 /// @return `1` if the element is present in the list, `0` otherwise
-ListSize find(List *_list, NodeType _element){
-    _Val(&_element);
+ListSize find(List *_list, ElementType _element){
+    __Val = _element;
     return !(!traverse_headward(_list, _find));
 }
 /// @brief count the number of element occurrences in the list
 /// @param _list a pointer to the list
 /// @param _element element to be counted
 /// @return number of elements matched 
-ListSize count(List *_list, NodeType _element){
-    _Val(&_element);
+ListSize count(List *_list, ElementType _element){
+    __Val = _element;
     return traverse_headward(_list, _count);
 }
 /// @brief traverse the elements of the list with a special function (from Head to Tail)
 /// @param _list a pointer to the list
 /// @param _pfun function pointer that do work on the elements inside list nodes
 /// @returns accumulation of the traversal function return
-ListSize traverse_headward(List *_list, int _pfun(NodeType *_E)){
+ListSize traverse_headward(List *_list, int _pfun(ElementType *_E)){
     Node *_pNode = _list -> _head;
     ListSize result = 0;
     while (_pNode){
@@ -400,7 +340,7 @@ ListSize traverse_headward(List *_list, int _pfun(NodeType *_E)){
 /// @param _list a pointer to the list
 /// @param _pfun function pointer that do work on the elements inside list nodes
 /// @returns accumulation of the traversal function return
-ListSize traverse_tailward(List *_list, int _pfun(NodeType *_E)){
+ListSize traverse_tailward(List *_list, int _pfun(ElementType *_E)){
     Node *_pNode = _list -> _tail;
     ListSize result = 0;
     while (_pNode){
@@ -423,8 +363,8 @@ void reverse(List *_list){
 /// @brief make all list elements equal to a value
 /// @param _list a pointer to the list
 /// @param val value to make all elements equal to
-void fill(List *_list, NodeType val){
-    _Val(&val);
+void fill(List *_list, ElementType val){
+    __Val = val;
     traverse_headward(_list, _makeEqualWithVal);
 }
 /// @brief copy all elements in source to destination, all elements in destination are erased
@@ -454,17 +394,4 @@ void printAllElements(List *_list, char *separator){
 void swap(ListIterator _it1, ListIterator _it2){
     _swap(&_it1 -> _val, &_it2 -> _val);
 }
-
-//!----------------------------------
-int main(){
-    List list1;
-    create(&list1);
-    for (int i = 0; i<19 ;i++){
-        addTail(&list1, i);
-        if (i%3==0)
-            reverse(&list1);
-        printAllElements(&list1, " ");
-        printf("\n--------%d------\n", i);
-    }
-    return 0;
-}
+#endif /* DOUBLY_LINKED_LIST_c */
