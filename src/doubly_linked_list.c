@@ -112,6 +112,7 @@ ListIterator jump_tailward(ListIterator _it, unsigned _step){
 ListIterator next(ListIterator _it){
     if (_it)
         return _it -> _next;
+    return _it;
 }
 /// @brief advances the iterator to the head by 1 step
 /// @param _it an iterator to the current element
@@ -119,6 +120,7 @@ ListIterator next(ListIterator _it){
 ListIterator prev(ListIterator _it){
     if (_it)
         return _it -> _prev;
+    return _it;
 }
 /// @brief get an iterator pointing at the element in the specified index, including negative indexing
 /// @attention `0` is the first element at the head, `-1` is the last element at the tail, `-2` is second to last, ...
@@ -128,7 +130,7 @@ ListIterator prev(ListIterator _it){
 ListIterator at(List *_list, signed _index){
     if (_index < 0)
         _index += _list -> _size;
-    if (_index >= _list -> _size || _index < 0)
+    if ((ListSize)_index >= _list -> _size || _index < 0)
         return NULL;
     return jump_headward(head(_list), _index);
 }
