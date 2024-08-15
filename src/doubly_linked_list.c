@@ -61,18 +61,21 @@ void _swap(ElementType *_E1, ElementType *_E2){
 /// @return a pointer the next element in the list to the left, if no such elements, returns `Null`
 // TODO refactor
 ListIterator _eraseNode(List *_list, Node *_node){
-    Node *retNode = _node -> _next;
-    if (_node -> _prev)
-        _node -> _prev -> _next = _node -> _next;
-    else
-        _list -> _head = _node -> _next;
-    if (_node -> _next)
-        _node -> _next -> _prev = _node -> _prev;
-    else
-        _list -> _tail = _node -> _prev;
-    free(_node);
-    _list -> _size--;
-    return retNode;
+    if (_node){
+        Node *retNode = _node -> _next;
+        if (_node -> _prev)
+            _node -> _prev -> _next = _node -> _next;
+        else
+            _list -> _head = _node -> _next;
+        if (_node -> _next)
+            _node -> _next -> _prev = _node -> _prev;
+        else
+            _list -> _tail = _node -> _prev;
+        free(_node);
+        _list -> _size--;
+        return retNode;
+    }
+    return NULL;
 }
 
 /// @brief initializes the list pointers to `NULL` and the list size to 0
@@ -207,11 +210,11 @@ ListIterator addTail(List *_list, ElementType val){
 /// @param _element element to be inserted
 /// @param _index the index, must be [0, size -1] inclusive
 /// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
-ListIterator insert(List *_list, ElementType _element, ListSize _index){
+ListIterator insertAt(List *_list, ElementType _element, ListSize _index){
+    if (!_index)
+        return addHead(_list, _element);
     if (_index >= _list -> _size)
         return 0;
-    if (_index == 0)
-        return addHead(_list, _element);
     Node *_pNode = _list -> _head;
     while(--_index)
         _pNode = _pNode -> _next;
@@ -257,6 +260,8 @@ ListIterator eraseHead(List *_list){
     if (!_list -> _size){
         _list -> _head = _list -> _tail = NULL;
     }
+    else
+        _list -> _head -> _prev = NULL;
     return _list -> _head;
 }
 /// @brief erases the Tail element in the list (the right most element)
@@ -274,12 +279,14 @@ ListIterator eraseTail(List *_list){
     if (!_list -> _size){
         _list -> _head = _list -> _tail = NULL;
     }
+    else
+        _list -> _tail -> _next = NULL;
     return _list -> _tail;
 }
 /// @brief erases the element pointed to by an iterator
 /// @param _list a pointer to the list
 /// @param _it an iterator points at the element to be deleted
-/// @return an iterator points at the next element in the list, `NULL` if it's the last element
+/// @return an iterator points at the next element in the list, `NULL` if it's the last element or `_index` is out-of-bound
 ListIterator erase(List *_list, ListIterator _it){
     return _eraseNode(_list, _it);
 }
@@ -287,9 +294,9 @@ ListIterator erase(List *_list, ListIterator _it){
 /// @attention `0` is the first element at the head, `-1` is the last element at the tail, `-2` is second to last, ...
 /// @param _list a pointer to the list
 /// @param _index index of the element to be deleted
-/// @return an iterator points at the next element in the list, `NULL` if it's the last element
+/// @return an iterator points at the next element in the list, `NULL` if it's the last element or `_index` is out-of-bound
 ListIterator eraseAt(List *_list, signed _index){
-    return erase(_list, at(_list, _index));
+    return _eraseNode(_list, at(_list, _index));
 }
 /// @brief erases all occurrences of a particular value from te list
 /// @param _list a pointer to the list
@@ -329,7 +336,7 @@ ListSize count(List *_list, ElementType _element){
 /// @param _list a pointer to the list
 /// @param _pfun function pointer that do work on the elements inside list nodes
 /// @returns accumulation of the traversal function return
-ListSize traverse_headward(List *_list, int _pfun(ElementType *_E)){
+ListSize traverse_tailward(List *_list, int _pfun(ElementType *_E)){
     Node *_pNode = _list -> _head;
     ListSize result = 0;
     while (_pNode){
@@ -342,7 +349,7 @@ ListSize traverse_headward(List *_list, int _pfun(ElementType *_E)){
 /// @param _list a pointer to the list
 /// @param _pfun function pointer that do work on the elements inside list nodes
 /// @returns accumulation of the traversal function return
-ListSize traverse_tailward(List *_list, int _pfun(ElementType *_E)){
+ListSize traverse_headward(List *_list, int _pfun(ElementType *_E)){
     Node *_pNode = _list -> _tail;
     ListSize result = 0;
     while (_pNode){

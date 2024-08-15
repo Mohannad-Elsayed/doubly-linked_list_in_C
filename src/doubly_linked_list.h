@@ -20,7 +20,7 @@
 #define __traverseFunction
 /// @brief helper function to traverse list elements
 /// @param _E 
-void _traverseFunction(ElementType *_E){
+int _traverseFunction(ElementType *_E){
     printf("%d ", *_E);
 }
 #endif /* __traverseFunction */
@@ -47,8 +47,6 @@ typedef struct list {
 } List;
 
 int _comp(ElementType *_E1, ElementType *_E2);
-void _traverseFunction(ElementType *_E);
-void _printElement(ElementType *_E);
 ElementType* _Val(ElementType *val);
 int _makeEqualWithVal(ElementType *_E);
 int _find(ElementType *_E);
@@ -74,7 +72,7 @@ int empty(List *_list);
 
 ListIterator addHead(List *_list, ElementType val);
 ListIterator addTail(List *_list, ElementType val);
-ListIterator insert(List *_list, ElementType _element, ListSize _index);
+ListIterator insertAt(List *_list, ElementType _element, ListSize _index);
 void append(List *source, List *destination);
 void prepend(List *source, List *destination);
 
