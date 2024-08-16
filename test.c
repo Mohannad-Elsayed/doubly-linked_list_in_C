@@ -80,6 +80,7 @@ static void test_printAllElements(void){}
 static void test_swap(void){}
 
 int main(){
+    //! test with no, one, two, 100 element
     test(_comp);
     test(_makeEqualWithVal);
     test(_count);

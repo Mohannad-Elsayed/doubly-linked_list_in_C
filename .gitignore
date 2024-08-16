@@ -35,3 +35,5 @@ vendor/
 
 test
 tempCodeRunnerFile.c
+benchmark
+benchmark.c
