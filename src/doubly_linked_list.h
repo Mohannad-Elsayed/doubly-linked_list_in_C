@@ -8,7 +8,7 @@
 /*      SHOULD BE DEFINED BY THE USER      */
 #ifndef ElementType
 #define ElementType int
-#endif /* ElementTypePtr/
+#endif /* ElementTypePtr */
 #ifndef equal
 #define equal(a,b) (a) == (b)
 #endif /* equal(a, b) */
@@ -51,7 +51,6 @@ typedef struct list {
 } List;
 
 int _comp(ElementTypePtr _E1, ElementTypePtr _E2);
-ElementType* _Val(ElementTypePtr val);
 int _makeEqualWithVal(ElementTypePtr _E);
 int _find(ElementTypePtr _E);
 int _count(ElementTypePtr _E);
@@ -71,7 +70,7 @@ ListIterator at(List *_list, signed _index);
 ListIterator head(List *_list);
 ListIterator tail(List *_list);
 
-ElementType* val(ListIterator _it);
+ElementTypePtr val(ListIterator _it);
 ListSize size(List *_list);
 int empty(List *_list);
 

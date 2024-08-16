@@ -52,7 +52,7 @@ ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
 /// @param _E1 pointer to the first element's pointer
 /// @param _E2 pointer to the second element's pointer
 // TODO debug
-void _swap(ElementTypePtr*_E1, ElementTypePtr*_E2){
+void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
     ElementTypePtr _T = *_E1;
     // printf("1:%p \n  %p\n\n2:%p \n  %p\n\n3: %p\n   %p\n\n\n", _E1, *_E1, _E2, *_E2, _T, *_T);
     // printf("Before: %p\n        %p\n\n", *_E1, *_E2);
@@ -167,7 +167,7 @@ ListIterator tail(List *_list){
 /// @param _it an iterator to the current element
 /// @return pointer to the value pointed to by the iterator
 /// @attention the function doesn't check the iterator's validity
-ElementTypePtrval(ListIterator _it){
+ElementTypePtr val(ListIterator _it){
     return _it -> _val;
 }
 /// @return returns the number of elements in the list
