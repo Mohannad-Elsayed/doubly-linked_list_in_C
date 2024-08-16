@@ -33,6 +33,5 @@ node_modules/
 venv/
 vendor/
 
-test.c
 test
 tempCodeRunnerFile.c
