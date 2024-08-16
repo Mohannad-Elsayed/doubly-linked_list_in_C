@@ -5,10 +5,19 @@
 #ifndef DOUBLY_LINKED_LIST_HEADER
 #define DOUBLY_LINKED_LIST_HEADER 1
 
+
 /*      SHOULD BE DEFINED BY THE USER      */
 #ifndef ElementType
 #define ElementType int
 #endif /* ElementTypePtr */
+
+/// @brief helper function to print an element of type `ElementType`
+/// @param _E pointer to the element
+void _printElement(ElementType *_E);
+/// @brief helper function to traverse list elements
+/// @param _E List element
+int _traverseFunction(ElementType *_E);
+
 #ifndef equal
 #define equal(a,b) (a) == (b)
 #endif /* equal(a, b) */
@@ -20,8 +29,6 @@
 #endif /* smaller(a, b) */
 #ifndef __traverseFunction
 #define __traverseFunction
-/// @brief helper function to traverse list elements
-/// @param _E 
 int _traverseFunction(ElementTypePtr _E){
     printf("%d ", *_E);
     return 0;
@@ -29,8 +36,6 @@ int _traverseFunction(ElementTypePtr _E){
 #endif /* __traverseFunction */
 #ifndef __printElement
 #define __printElement
-/// @brief helper function to print an element of type `ElementType`
-/// @param _E pointer to the element
 void _printElement(ElementTypePtr _E){
     printf("%d", *_E);
 }
@@ -50,14 +55,14 @@ typedef struct list {
     ListSize _size;
 } List;
 
-int _comp(ElementTypePtr _E1, ElementTypePtr _E2);
-int _makeEqualWithVal(ElementTypePtr _E);
-int _find(ElementTypePtr _E);
-int _count(ElementTypePtr _E);
-ListIterator _insert(Node *_pNode, ElementTypePtr _E);
-void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2);
-ListIterator _makeNode(const ElementTypePtr const _E);
-ListIterator _eraseNode(List *_list, Node *_node);
+static int _comp(ElementTypePtr _E1, ElementTypePtr _E2);
+static int _makeEqualWithVal(ElementTypePtr _E);
+static int _find(ElementTypePtr _E);
+static int _count(ElementTypePtr _E);
+static ListIterator _insert(Node *_pNode, ElementTypePtr _E);
+static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2);
+static ListIterator _makeNode(const ElementTypePtr const _E);
+static ListIterator _eraseNode(List *_list, Node *_node);
 
 void create(List *_list);
 void clear(List *_list);

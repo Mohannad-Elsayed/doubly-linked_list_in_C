@@ -7,7 +7,7 @@
 ElementType __Val;
 /// @brief helper function compares two elements of type `ElementType`
 /// @return `1` if element 1 greater than element 2, `0` if both are equal, `-1` if element 1 is smaller than element 2
-int _comp(ElementTypePtr _E1, ElementTypePtr _E2){
+static int _comp(ElementTypePtr _E1, ElementTypePtr _E2){
     if (equal(*_E1, *_E2))
         return 0;
     else if (greater(*_E1, *_E2))
@@ -17,18 +17,18 @@ int _comp(ElementTypePtr _E1, ElementTypePtr _E2){
 }
 /// @brief helper function to make a list element's value equal to a given value
 /// @param _E the list element's value
-int _makeEqualWithVal(ElementTypePtr _E){
+static int _makeEqualWithVal(ElementTypePtr _E){
     *_E = __Val;
     return 0;
 }
 /// @brief helper function for function `find()` to compare two elements
 /// @return `1` if two elements are equal, `0` otherwise
-int _find(ElementTypePtr _E){
+static int _find(ElementTypePtr _E){
     return !_comp(&__Val, _E);
 }
 /// @brief helper function for function `find()` to compare two elements
 /// @return `1` if two elements are equal, `0` otherwise
-int _count(ElementTypePtr _E){
+static int _count(ElementTypePtr _E){
     return !_comp(&__Val, _E);
 }
 /// @brief helper function to allocate, insert a node after a specified node
@@ -37,7 +37,7 @@ int _count(ElementTypePtr _E){
 /// @param _fixedNode a pointer to the current node
 /// @param _E the element to be inserted
 /// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
-ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
+static ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
     if (!_fixedNode)
         return NULL;
     Node *_insertedNode = _makeNode(_E);
@@ -53,7 +53,7 @@ ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
 /// @brief a helper function swaps two elements pointers
 /// @param _E1 pointer to the first element's pointer
 /// @param _E2 pointer to the second element's pointer
-void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
+static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
     ElementTypePtr _T = *_E1;
     *_E1 = *_E2;
     *_E2 = _T;
@@ -61,7 +61,7 @@ void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
 /// @brief helper function to make a node and assign its value
 /// @param _E data inside the node
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
-ListIterator _makeNode(const ElementTypePtr const _E){
+static ListIterator _makeNode(const ElementTypePtr const _E){
     Node *_pNode = (Node*)malloc(sizeof(Node));
     if (!_pNode)
         return NULL;
@@ -77,7 +77,7 @@ ListIterator _makeNode(const ElementTypePtr const _E){
 /// @param _node pointer to the element to be erased
 /// @return a pointer the next element in the list to the left, if no such elements, returns `Null`
 // TODO refactor
-ListIterator _eraseNode(List *_list, Node *_node){
+static ListIterator _eraseNode(List *_list, Node *_node){
     if (_node){
         Node *retNode = _node -> _next;
         if (_node -> _prev)
@@ -277,19 +277,16 @@ void prepend(List *source, List *destination){
 /// @returns an iterator to the new HEAD in success removal, `NULL` if the list is empty before or after the removal
 ListIterator eraseHead(List *_list){
     if (!_list -> _size){
-        _list -> _head = _list -> _tail = NULL;
-        return NULL;
+        return _list -> _head = _list -> _tail = NULL;
     }
     Node *_pNode = _list -> _head;
     _list -> _head = _list -> _head -> _next;
     free(_pNode -> _val);
     free(_pNode);
     _list -> _size--;
-    if (!_list -> _size){
-        _list -> _head = _list -> _tail = NULL;
-    }
-    else
-        _list -> _head -> _prev = NULL;
+    if (!_list -> _size)
+        return _list -> _head = _list -> _tail = NULL;
+    _list -> _head -> _prev = NULL;
     return _list -> _head;
 }
 /// @brief erases the Tail element in the list (the right most element)
@@ -297,19 +294,16 @@ ListIterator eraseHead(List *_list){
 /// @returns an iterator to the new TAIL in success removal, `NULL` if the list is empty before or after the removal
 ListIterator eraseTail(List *_list){
     if (!_list -> _size){
-        _list -> _head = _list -> _tail = NULL;
-        return NULL;
+        return _list -> _head = _list -> _tail = NULL;
     }
     Node *_pNode = _list -> _tail;
     _list -> _tail = _list -> _tail -> _prev;
     free(_pNode -> _val);
     free(_pNode);
     _list -> _size--;
-    if (!_list -> _size){
-        _list -> _head = _list -> _tail = NULL;
-    }
-    else
-        _list -> _tail -> _next = NULL;
+    if (!_list -> _size)
+        return _list -> _head = _list -> _tail = NULL;
+    _list -> _tail -> _next = NULL;
     return _list -> _tail;
 }
 /// @brief erases the element pointed to by an iterator
