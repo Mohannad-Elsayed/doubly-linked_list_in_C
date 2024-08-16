@@ -9,7 +9,7 @@
 /*      SHOULD BE DEFINED BY THE USER      */
 #ifndef ElementType
 #define ElementType int
-#endif /* ElementTypePtr */
+#endif /* ElementType */
 
 /// @brief helper function to print an element of type `ElementType`
 /// @param _E pointer to the element
@@ -29,14 +29,14 @@ int _traverseFunction(ElementType *_E);
 #endif /* smaller(a, b) */
 #ifndef __traverseFunction
 #define __traverseFunction
-int _traverseFunction(ElementTypePtr _E){
+int _traverseFunction(ElementType *_E){
     printf("%d ", *_E);
     return 0;
 }
 #endif /* __traverseFunction */
 #ifndef __printElement
 #define __printElement
-void _printElement(ElementTypePtr _E){
+void _printElement(ElementType *_E){
     printf("%d", *_E);
 }
 #endif /* __printElement */
@@ -81,7 +81,7 @@ int empty(List *_list);
 
 ListIterator addHead(List *_list, ElementType val);
 ListIterator addTail(List *_list, ElementType val);
-ListIterator insertAt(List *_list, ElementType _element, ListSize _index);
+ListIterator insertAt(List *_list, ElementType _element, signed _index);
 ListIterator insertAfter(List *_list, ElementType _element, ListIterator _it);
 void append(List *source, List *destination);
 void prepend(List *source, List *destination);

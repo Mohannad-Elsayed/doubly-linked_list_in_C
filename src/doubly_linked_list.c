@@ -70,6 +70,7 @@ static ListIterator _makeNode(const ElementTypePtr const _E){
         return free(_pNode), NULL;
     *__val = *_E;
     _pNode -> _val = __val;
+    _pNode -> _next = _pNode -> _prev = NULL;
     return _pNode;
 }
 /// @brief helper function to erase an element in the list, decrement the size
@@ -89,7 +90,9 @@ static ListIterator _eraseNode(List *_list, Node *_node){
         else
             _list -> _tail = _node -> _prev;
         free(_node -> _val);
+        _node -> _val = NULL;
         free(_node);
+        _node = NULL;
         _list -> _size--;
         return retNode;
     }
@@ -219,25 +222,22 @@ ListIterator addTail(List *_list, ElementType val){
     }
     return NULL;
 }
-/// @brief insert an element in the specified index
+/// @brief insert an element in the specified index (zero-based)
 /// @param _list a pointer to the list
 /// @param _element element to be inserted
-/// @param _index the index, must be [0, size -1] inclusive
+/// @param _index the index, must be in the range [-size, size-1] inclusive
 /// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
-ListIterator insertAt(List *_list, ElementType _element, ListSize _index){
-    if (!_index)
+ListIterator insertAt(List *_list, ElementType _element, signed _index){
+    if (!_index || !(_index + _list -> _size))
         return addHead(_list, _element);
     if (!~_index)
         return addTail(_list, _element);
-    if (_index >= _list -> _size)
-        return 0;
-    Node *_pNode = _list -> _head;
-    while(--_index)
-        _pNode = _pNode -> _next;
-    _pNode = _insert(_pNode, &_element);
+    Node *_pNode = at(_list, _index);
     if (_pNode){
-        _list -> _size++;
-        return _pNode;
+        _pNode = _insert(_pNode -> _prev, &_element);
+        if (_pNode)
+            return _list -> _size++, _pNode;
+        return NULL;
     }
     return NULL;
 }
@@ -279,10 +279,12 @@ ListIterator eraseHead(List *_list){
     if (!_list -> _size){
         return _list -> _head = _list -> _tail = NULL;
     }
-    Node *_pNode = _list -> _head;
+    Node *_oldHead = _list -> _head;
     _list -> _head = _list -> _head -> _next;
-    free(_pNode -> _val);
-    free(_pNode);
+    free(_oldHead -> _val);
+    _oldHead -> _val = NULL;
+    free(_oldHead);
+    _oldHead = NULL;
     _list -> _size--;
     if (!_list -> _size)
         return _list -> _head = _list -> _tail = NULL;
@@ -296,10 +298,12 @@ ListIterator eraseTail(List *_list){
     if (!_list -> _size){
         return _list -> _head = _list -> _tail = NULL;
     }
-    Node *_pNode = _list -> _tail;
+    Node *_oldTail = _list -> _tail;
     _list -> _tail = _list -> _tail -> _prev;
-    free(_pNode -> _val);
-    free(_pNode);
+    free(_oldTail -> _val);
+    _oldTail -> _val = NULL;
+    free(_oldTail);
+    _oldTail = NULL;
     _list -> _size--;
     if (!_list -> _size)
         return _list -> _head = _list -> _tail = NULL;
