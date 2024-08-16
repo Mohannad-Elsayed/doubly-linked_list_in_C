@@ -38,6 +38,8 @@ int _count(ElementTypePtr _E){
 /// @param _E the element to be inserted
 /// @return an iterator to the inserted node in case of successful insertion, `NULL` otherwise
 ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
+    if (!_fixedNode)
+        return NULL;
     Node *_insertedNode = _makeNode(_E);
     if (_insertedNode){
         _insertedNode -> _prev = _fixedNode;
@@ -51,27 +53,24 @@ ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
 /// @brief a helper function swaps two elements pointers
 /// @param _E1 pointer to the first element's pointer
 /// @param _E2 pointer to the second element's pointer
-// TODO debug
 void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
     ElementTypePtr _T = *_E1;
-    // printf("1:%p \n  %p\n\n2:%p \n  %p\n\n3: %p\n   %p\n\n\n", _E1, *_E1, _E2, *_E2, _T, *_T);
-    // printf("Before: %p\n        %p\n\n", *_E1, *_E2);
     *_E1 = *_E2;
     *_E2 = _T;
-    // printf("After: %p\n       %p\n\n\n", *_E1, *_E2);
 }
 /// @brief helper function to make a node and assign its value
 /// @param _E data inside the node
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
 ListIterator _makeNode(const ElementTypePtr const _E){
     Node *_pNode = (Node*)malloc(sizeof(Node));
+    if (!_pNode)
+        return NULL;
     ElementTypePtr __val = (ElementTypePtr)malloc(sizeof(ElementType));
-    if (_pNode && __val){
-        *__val = *_E;
-        _pNode -> _val = __val;
-        return _pNode;
-    }
-    return NULL;
+    if (!__val)
+        return free(_pNode), NULL;
+    *__val = *_E;
+    _pNode -> _val = __val;
+    return _pNode;
 }
 /// @brief helper function to erase an element in the list, decrement the size
 /// @param _list pointer to the list
