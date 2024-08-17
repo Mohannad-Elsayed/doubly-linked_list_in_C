@@ -1,21 +1,19 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -I./src
+CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = test.c src/doubly_linked_list.c
-OBJ = $(SRC:.c=.o)
+test: test.c
+	$(CC) $(CFLAGS) -o test $^
+	./test
 
-# Output binary
-TARGET = test_program
+example: example.c
+	$(CC) $(CFLAGS) -o example $^
+	./example
 
-all: $(TARGET)
-
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+benchmark: benchmark.c
+	$(CC) $(CFLAGS) -o benchmark $^
+	./benchmark
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f test example tempCodeRunnerFile.c 
 
-rebuild: clean all
+.PHONY: all clean test example
