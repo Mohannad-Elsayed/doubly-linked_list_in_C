@@ -10,14 +10,6 @@
 #ifndef ElementType
 #define ElementType int
 #endif /* ElementType */
-
-/// @brief helper function to print an element of type `ElementType`
-/// @param _E pointer to the element
-void _printElement(ElementType *_E);
-/// @brief helper function to traverse list elements
-/// @param _E List element
-int _traverseFunction(ElementType *_E);
-
 #ifndef equal
 #define equal(a,b) (a) == (b)
 #endif /* equal(a, b) */
@@ -57,11 +49,10 @@ typedef struct list {
 
 static int _comp(ElementTypePtr _E1, ElementTypePtr _E2);
 static int _makeEqualWithVal(ElementTypePtr _E);
-static int _find(ElementTypePtr _E);
 static int _count(ElementTypePtr _E);
 static ListIterator _insert(Node *_pNode, ElementTypePtr _E);
 static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2);
-static ListIterator _makeNode(const ElementTypePtr const _E);
+static ListIterator _makeNode(const ElementTypePtr _E);
 static ListIterator _eraseNode(List *_list, Node *_node);
 
 void create(List *_list);

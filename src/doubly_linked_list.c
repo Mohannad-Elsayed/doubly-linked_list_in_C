@@ -23,11 +23,6 @@ static int _makeEqualWithVal(ElementTypePtr _E){
 }
 /// @brief helper function for function `find()` to compare two elements
 /// @return `1` if two elements are equal, `0` otherwise
-static int _find(ElementTypePtr _E){
-    return !_comp(&__Val, _E);
-}
-/// @brief helper function for function `find()` to compare two elements
-/// @return `1` if two elements are equal, `0` otherwise
 static int _count(ElementTypePtr _E){
     return !_comp(&__Val, _E);
 }
@@ -61,7 +56,7 @@ static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
 /// @brief helper function to make a node and assign its value
 /// @param _E data inside the node
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
-static ListIterator _makeNode(const ElementTypePtr const _E){
+static ListIterator _makeNode(const ElementTypePtr _E){
     Node *_pNode = (Node*)malloc(sizeof(Node));
     if (!_pNode)
         return NULL;
@@ -364,7 +359,7 @@ ListIterator find(List *_list, ElementType _element){
 /// @return number of elements matched 
 ListSize count(List *_list, ElementType _element){
     __Val = _element;
-    return traverse_tailward(_list, _find);
+    return traverse_tailward(_list, _count);
 }
 /// @brief traverse the elements of the list with a special function (from Head to Tail)
 /// @param _list a pointer to the list
