@@ -105,5 +105,6 @@ void copy(List *_list1, List *_list2);
 void printAllElements(List *_list, char *separator);
 
 void swap(ListIterator _it1, ListIterator _it2);
+int compare(List *_list1, List *_list2);
 
 #endif /* DOUBLY_LINKED_LIST_HEADER */

@@ -437,4 +437,20 @@ void printAllElements(List *_list, char *separator){
 void swap(ListIterator _it1, ListIterator _it2){
     _swap(&_it1 -> _val, &_it2 -> _val);
 }
+/// @brief compares two lists regarding number of elements and elements
+/// @param _list1 a pointer to the first list
+/// @param _list2 a pointer to the second list
+/// @return `1` if both are identical, `0` otherwise
+int compare(List *_list1, List *_list2){
+    if (_list1->_size != _list2->_size)
+        return 0;
+    Node *pl1 = _list1->_head, *pl2 = _list2->_head;
+    while(pl1){
+        if (_comp(pl1->_val, pl2->_val))
+            return 0;
+        pl1 = pl1->_next,
+        pl2 = pl2->_next;
+    }
+    return 1;
+}
 #endif /* DOUBLY_LINKED_LIST_IMPL */
