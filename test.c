@@ -68,9 +68,9 @@ static void test__insert(void){
 
     // p <-> r <-> q
     assert(p -> _next == r);
-    assert(r -> _prev = p);
+    assert(r -> _prev == p);
     assert(r -> _next == q);
-    assert(q -> _prev = r);
+    assert(q -> _prev == r);
 
     free(p); free(q); free(r);
 }
