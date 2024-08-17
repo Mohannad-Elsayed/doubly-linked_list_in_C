@@ -224,6 +224,7 @@ static void test_eraseTail(void){
 
     clear(&lst);
 }
+
 static void test_insertAt(void){
     List lst;
     create(&lst);
@@ -286,6 +287,7 @@ static void test_insertAfter(void){
 
     clear(&lst);
 }
+
 static void test_append(void){
     List lst1, lst2;
     create(&lst1);
@@ -374,11 +376,60 @@ static void test__eraseNode(void){
     clear(&lst);
 }
 static void test_erase(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1));
+    erase(&lst, lst._head);
 
+    assert(lst._head == NULL);
+    assert(lst._tail == NULL);
+    assert(lst._size == 0);
+
+    assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
+    Node *p = erase(&lst, lst._head);
+
+    assert(lst._head == p);
+    assert(*p->_val == 2);
+
+    p = erase(&lst, lst._tail);
+
+    assert(lst._head == lst._tail);
+    assert(*lst._tail->_val == 2);
+    assert(p == NULL);
+
+    clear(&lst);
 }
 
-static void test_jump_headward(void){}
-static void test_jump_tailward(void){}
+static void test_jump_headward(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
+    Node *t = lst._tail;
+    Node *q = jump_headward(t, 0), *r = jump_headward(t, 1), *s = jump_headward(t, 2);
+
+    assert(q == t);
+    assert(r == lst._head->_next);
+    assert(s == lst._head);
+
+    clear(&lst);
+}
+static void test_jump_tailward(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
+    Node *t = lst._head;
+    Node *q = jump_tailward(t, 0), *r = jump_tailward(t, 1), *s = jump_tailward(t, 2);
+
+    assert(q == t);
+    assert(r == lst._head->_next);
+    assert(s == lst._tail);
+
+    t = jump_tailward(t, 4);
+
+    assert(t == NULL);
+
+    clear(&lst);
+}
 static void test_at(void){
     List lst;
     create(&lst);
@@ -399,8 +450,52 @@ static void test_at(void){
 
     clear(&lst);
 }
-static void test_eraseAt(void){}
-static void test_eraseVal(void){}
+static void test_eraseAt(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1));
+    Node *p = eraseAt(&lst, 0);
+
+    assert(lst._head == lst._tail && lst._head == NULL);
+    assert(!lst._size);
+    assert(p == NULL);
+
+    assert(addTail(&lst, 1));
+    assert(addTail(&lst, 2));
+    assert(addTail(&lst, 3));
+    p = eraseAt(&lst, 1);
+
+    assert(p == lst._tail);
+    assert(p == lst._head->_next);
+
+    p = eraseAt(&lst, -2);
+
+    assert(lst._head == lst._tail);
+    assert(lst._head == p);
+
+    p = eraseAt(&lst, 3);
+
+    assert(p == NULL);
+
+    clear(&lst);
+}
+static void test_eraseVal(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
+    ListSize x = eraseVal(&lst, 1);
+
+    assert(*lst._head->_val == 2);
+    assert(lst._size == 2);
+    assert(x == 1);
+
+    x = eraseVal(&lst, 10);
+
+    assert(x == 0);
+    assert(lst._size == 2);
+
+    clear(&lst);
+}
 static void test_next(void){
     List lst;
     create(&lst);
@@ -438,19 +533,114 @@ static void test_tail(void){
     clear(&lst);
 }
 
-static void test_traverse_headward(void){}
-static void test_traverse_tailward(void){}
-static void test_count(void){}
-static void test_find(void){}
+static void test_count(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 1) && addTail(&lst, 2));
 
+    assert(count(&lst, 1) == 2);
+    assert(count(&lst, 2) == 1);
+    assert(count(&lst, 3) == 0);
 
-static void test_reverse(void){}
-static void test_fill(void){}
-static void test_copy(void){}
-static void test_swap(void){}
+    clear(&lst);
+}
+static void test_find(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 1) && addTail(&lst, 2));
+    Node *p = find(&lst, 1), *q = find(&lst, 3);
+
+    assert(p == lst._head);
+    assert(q == NULL);
+
+    clear(&lst);
+}
+
+static void test_compare(void){
+    List lst1, lst2;
+    create(&lst1);
+    create(&lst2);
+    assert(addTail(&lst1, 1) && addTail(&lst1, 2) && addTail(&lst1, 3));
+    assert(addTail(&lst2, 1) && addTail(&lst2, 2) && addTail(&lst2, 3));
+    
+    assert(compare(&lst1, &lst2) == 1);
+
+    *lst1._head->_val = 10;
+
+    assert(!compare(&lst1, &lst2));
+
+    clear(&lst1);
+    clear(&lst2);
+}
+static void test_copy(void){
+    List lst1, lst2;
+    create(&lst1);
+    create(&lst2);
+    assert(addTail(&lst1, 1) && addTail(&lst1, 2) && addTail(&lst1, 3));
+    copy(&lst1, &lst2);
+
+    assert(compare(&lst1, &lst2));
+
+    assert(addTail(&lst2, 1) && addTail(&lst2, 2) && addTail(&lst2, 3));
+    copy(&lst1, &lst2);
+
+    assert(compare(&lst1, &lst2));
+
+    clear(&lst1);
+    clear(&lst2);
+}
+static void test_reverse(void){
+    List lst1, lst2;
+    create(&lst1);
+    create(&lst2);
+    assert(addTail(&lst1, 1));
+    reverse(&lst1);
+    
+    assert(lst1._head == lst1._tail);
+    assert(lst1._size == 1);
+    assert(*lst1._head->_val == 1);
+
+    assert(addTail(&lst1, 2) && addTail(&lst1, 3) && addTail(&lst1, 4));
+    assert(addHead(&lst2, 1) && addHead(&lst2, 2) && addHead(&lst2, 3) && addHead(&lst2, 4));
+    reverse(&lst1);
+
+    assert(compare(&lst1, &lst2));
+
+    copy(&lst1, &lst2);
+    reverse(&lst1);
+    reverse(&lst1);
+
+    assert(compare(&lst1, &lst2));
+
+    clear(&lst1);
+}
+static void test_fill(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
+
+    fill(&lst, 9);
+
+    assert(lst._size == 3);
+    for (Node *h = lst._head; h; h = h->_next){
+        assert(*h->_val == 9);
+    }
+
+    clear(&lst);
+}
+static void test_swap(void){
+    List lst;
+    create(&lst);
+    assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
+    swap(lst._head, lst._tail);
+
+    assert(*lst._tail->_val == 1);
+    assert(*lst._head->_val == 3);
+
+    clear(&lst);
+}
 
 int main(){
-    //! test with no, one, two, 100 element
     test(_comp);
     test(_makeEqualWithVal);
     test(_makeNode);
@@ -488,14 +678,13 @@ int main(){
     test(head);
     test(tail);
     puts("");
-    test(traverse_tailward);
-    test(traverse_headward);
     test(count);
     test(find);
     puts("");
+    test(compare);
+    test(copy);
     test(reverse);
     test(fill);
-    test(copy);
     test(swap);
     printf("\n\t\x1b[32mAll tests passed\n");
     return 0;
