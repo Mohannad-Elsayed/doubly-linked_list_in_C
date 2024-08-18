@@ -9,9 +9,18 @@
     test_##fn(); // call the test function
 
 #define ElementType long long
-#define equal(a,b) (a)==(b)
-#define greater(a, b) (a)>(b)
-#define smaller(a, b) (a)<(b)
+typedef ElementType* ElementTypePtr;
+
+#define __compare_functions
+int equal(ElementTypePtr _E1, ElementTypePtr _E2){
+    return *_E1 == *_E2;
+}
+int greater(ElementTypePtr _E1, ElementTypePtr _E2){
+    return *_E1 > *_E2;
+}
+int smaller(ElementTypePtr _E1, ElementTypePtr _E2){
+    return *_E1 < *_E2;
+}
 
 #define __printElement
 void _printElement(ElementType *_E){
@@ -33,9 +42,9 @@ static void test__comp(void){
     big = 10000;
     small = -10000;
 
-    assert(!_comp(&eq1, &eq2));
-    assert(_comp(&big, &small) > 0);
-    assert(_comp(&small, &big) < 0);
+    assert(!_comp(&eq1, &eq2, equal, greater));
+    assert(_comp(&big, &small, equal, greater) > 0);
+    assert(_comp(&small, &big, equal, greater) < 0);
 
 }
 static void test__makeEqualWithVal(void){
@@ -54,6 +63,7 @@ static void test__makeNode(void){
     assert(p -> _next == NULL);
     assert(p -> _prev == NULL);
 
+    free(p->_val);
     free(p);
 }
 static void test__insert(void){
@@ -72,6 +82,7 @@ static void test__insert(void){
     assert(r -> _next == q);
     assert(q -> _prev == r);
 
+    free(p->_val); free(q->_val); free(r->_val);
     free(p); free(q); free(r);
 }
 static void test__swap(void){
@@ -334,6 +345,8 @@ static void test_val(void){
     Node *p = _makeNode(&x);
     assert(p);
     assert(val(p) == p->_val);
+
+    free(p->_val);
     free(p);
 }
 static void test_size(void){
@@ -483,13 +496,13 @@ static void test_eraseVal(void){
     List lst;
     create(&lst);
     assert(addTail(&lst, 1) && addTail(&lst, 2) && addTail(&lst, 3));
-    ListSize x = eraseVal(&lst, 1);
+    ListSize x = eraseVal(&lst, 1, equal);
 
     assert(*lst._head->_val == 2);
     assert(lst._size == 2);
     assert(x == 1);
 
-    x = eraseVal(&lst, 10);
+    x = eraseVal(&lst, 10, equal);
 
     assert(x == 0);
     assert(lst._size == 2);
@@ -538,9 +551,9 @@ static void test_count(void){
     create(&lst);
     assert(addTail(&lst, 1) && addTail(&lst, 1) && addTail(&lst, 2));
 
-    assert(count(&lst, 1) == 2);
-    assert(count(&lst, 2) == 1);
-    assert(count(&lst, 3) == 0);
+    assert(count(&lst, 1, equal) == 2);
+    assert(count(&lst, 2, equal) == 1);
+    assert(count(&lst, 3, equal) == 0);
 
     clear(&lst);
 }
@@ -548,7 +561,7 @@ static void test_find(void){
     List lst;
     create(&lst);
     assert(addTail(&lst, 1) && addTail(&lst, 1) && addTail(&lst, 2));
-    Node *p = find(&lst, 1), *q = find(&lst, 3);
+    Node *p = find(&lst, 1, equal), *q = find(&lst, 3, equal);
 
     assert(p == lst._head);
     assert(q == NULL);
@@ -563,11 +576,11 @@ static void test_compare(void){
     assert(addTail(&lst1, 1) && addTail(&lst1, 2) && addTail(&lst1, 3));
     assert(addTail(&lst2, 1) && addTail(&lst2, 2) && addTail(&lst2, 3));
     
-    assert(compare(&lst1, &lst2) == 1);
+    assert(compare(&lst1, &lst2, equal) == 1);
 
     *lst1._head->_val = 10;
 
-    assert(!compare(&lst1, &lst2));
+    assert(!compare(&lst1, &lst2, equal));
 
     clear(&lst1);
     clear(&lst2);
@@ -579,12 +592,12 @@ static void test_copy(void){
     assert(addTail(&lst1, 1) && addTail(&lst1, 2) && addTail(&lst1, 3));
     copy(&lst1, &lst2);
 
-    assert(compare(&lst1, &lst2));
+    assert(compare(&lst1, &lst2, equal));
 
     assert(addTail(&lst2, 1) && addTail(&lst2, 2) && addTail(&lst2, 3));
     copy(&lst1, &lst2);
 
-    assert(compare(&lst1, &lst2));
+    assert(compare(&lst1, &lst2, equal));
 
     clear(&lst1);
     clear(&lst2);
@@ -604,15 +617,16 @@ static void test_reverse(void){
     assert(addHead(&lst2, 1) && addHead(&lst2, 2) && addHead(&lst2, 3) && addHead(&lst2, 4));
     reverse(&lst1);
 
-    assert(compare(&lst1, &lst2));
+    assert(compare(&lst1, &lst2, equal));
 
     copy(&lst1, &lst2);
     reverse(&lst1);
     reverse(&lst1);
 
-    assert(compare(&lst1, &lst2));
+    assert(compare(&lst1, &lst2, equal));
 
     clear(&lst1);
+    clear(&lst2);
 }
 static void test_fill(void){
     List lst;
