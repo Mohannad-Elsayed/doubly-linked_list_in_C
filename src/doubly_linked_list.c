@@ -450,7 +450,8 @@ void printAllElements(List *_list, char *separator){
     Node *_pNode = _list -> _head;
     while (_pNode){
         _printElement(_pNode -> _val);
-        printf("%s", separator);
+        if (_pNode->_next) 
+            printf("%s", separator);
         _pNode = _pNode -> _next;
     }
 }
