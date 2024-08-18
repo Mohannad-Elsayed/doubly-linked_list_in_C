@@ -9,16 +9,24 @@
 /*      SHOULD BE DEFINED BY THE USER      */
 #ifndef ElementType
 #define ElementType int
+typedef ElementType* ElementTypePtr;
 #endif /* ElementType */
-#ifndef equal
-#define equal(a,b) (a) == (b)
-#endif /* equal(a, b) */
-#ifndef greater
-#define greater(a, b) (a) > (b)
-#endif /* greater(a, b) */
-#ifndef smaller
-#define smaller(a, b) (a) < (b)
-#endif /* smaller(a, b) */
+#ifndef __compare_functions
+#define __compare_functions
+int equal(ElementTypePtr _E1, ElementTypePtr _E2){
+    return *_E1 == *_E2;
+}
+int greater(ElementTypePtr _E1, ElementTypePtr _E2){
+    return *_E1 > *_E2;
+}
+int smaller(ElementTypePtr _E1, ElementTypePtr _E2){
+    return *_E1 < *_E2;
+}
+typedef struct compare_struct {
+    void *equal, *greater, *smaller;
+} CompareStruct;
+CompareStruct compareInt = {equal, greater, smaller};
+#endif /* __compare_functions */
 #ifndef __traverseFunction
 #define __traverseFunction
 int _traverseFunction(ElementType *_E){
@@ -35,7 +43,6 @@ void _printElement(ElementType *_E){
 /*  END SHOULD BE DEFINED BY THE USER      */
 
 typedef unsigned long long ListSize;
-typedef ElementType* ElementTypePtr;
 typedef struct node {
     ElementTypePtr _val;
     struct node *_next, *_prev;
@@ -47,9 +54,11 @@ typedef struct list {
     ListSize _size;
 } List;
 
-static int _comp(ElementTypePtr _E1, ElementTypePtr _E2);
+static int _comp(ElementTypePtr _E1,
+                 ElementTypePtr _E2,
+                 int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2),
+                 int greater_fun(ElementTypePtr _E1, ElementTypePtr _E2));
 static int _makeEqualWithVal(ElementTypePtr _E);
-static int _count(ElementTypePtr _E);
 static ListIterator _insert(Node *_pNode, ElementTypePtr _E);
 static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2);
 static ListIterator _makeNode(const ElementTypePtr _E);
@@ -81,10 +90,10 @@ ListIterator eraseHead(List *_list);
 ListIterator eraseTail(List *_list);
 ListIterator erase(List *_list, ListIterator _it);
 ListIterator eraseAt(List *_list, signed _index);
-ListSize eraseVal(List *_list, ElementType val);
+ListSize eraseVal(List *_list, ElementType val, int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2));
 
-ListIterator find(List *_list, ElementType _element);
-ListSize count(List *_list, ElementType _element);
+ListIterator find(List *_list, ElementType _element, int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2));
+ListSize count(List *_list, ElementType _element, int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2));
 
 ListSize traverse_headward(List *_list, int _pfun(ElementTypePtr _E));
 ListSize traverse_tailward(List *_list, int _pfun(ElementTypePtr _E));
@@ -96,6 +105,6 @@ void copy(List *_list1, List *_list2);
 void printAllElements(List *_list, char *separator);
 
 void swap(ListIterator _it1, ListIterator _it2);
-int compare(List *_list1, List *_list2);
+int compare(List *_list1, List *_list2, int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2));
 
 #endif /* DOUBLY_LINKED_LIST_HEADER */

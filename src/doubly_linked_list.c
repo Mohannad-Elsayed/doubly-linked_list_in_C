@@ -5,12 +5,19 @@
 
 /// a helper variable to hold filling value 
 ElementType __Val;
-/// @brief helper function compares two elements of type `ElementType`
-/// @return `1` if element 1 greater than element 2, `0` if both are equal, `-1` if element 1 is smaller than element 2
-static int _comp(ElementTypePtr _E1, ElementTypePtr _E2){
-    if (equal(*_E1, *_E2))
+/// @brief a helper function to compare two values
+/// @param _E1 a pointer to the first element
+/// @param _E2 a pointer to the second element
+/// @param equal_fun the equality function to compare against
+/// @param greater_fun the greater than function to compare against
+/// @return `0` if both equal, `> 0` if the first element greater than the second, `< 0` otherwise
+static int _comp(ElementTypePtr _E1,
+                 ElementTypePtr _E2,
+                 int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2),
+                 int greater_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
+    if (equal_fun(_E1, _E2))
         return 0;
-    else if (greater(*_E1, *_E2))
+    else if (greater_fun(_E1, _E2))
         return 1;
     else 
         return -1;
@@ -20,11 +27,6 @@ static int _comp(ElementTypePtr _E1, ElementTypePtr _E2){
 static int _makeEqualWithVal(ElementTypePtr _E){
     *_E = __Val;
     return 0;
-}
-/// @brief helper function for function `find()` to compare two elements
-/// @return `1` if two elements are equal, `0` otherwise
-static int _count(ElementTypePtr _E){
-    return !_comp(&__Val, _E);
 }
 /// @brief helper function to allocate, insert a node after a specified node
 /// @attention the function doesn't handle head and tail properly, use `addHead` and `addTail` for them
@@ -58,11 +60,13 @@ static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
 static ListIterator _makeNode(const ElementTypePtr _E){
     Node *_pNode = (Node*)malloc(sizeof(Node));
-    if (!_pNode)
+    if (_pNode == NULL)
         return NULL;
     ElementTypePtr __val = (ElementTypePtr)malloc(sizeof(ElementType));
-    if (!__val)
-        return free(_pNode), NULL;
+    if (__val == NULL){
+        free(_pNode); 
+        return NULL;
+    }
     *__val = *_E;
     _pNode -> _val = __val;
     _pNode -> _next = _pNode -> _prev = NULL;
@@ -323,12 +327,15 @@ ListIterator eraseAt(List *_list, signed _index){
 /// @brief erases all occurrences of a particular value from te list
 /// @param _list a pointer to the list
 /// @param val the value to be erased 
+/// @param equal_fun the equality function to compare against
 /// @return number of elements erased
-ListSize eraseVal(List *_list, ElementType val){
+ListSize eraseVal(List *_list, 
+                  ElementType val, 
+                  int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
     Node *_pNode = _list -> _head;
     int _flag = 0;
     while (_pNode){
-        if (!_comp(_pNode -> _val, &val)){
+        if (equal_fun(_pNode->_val, &val)){
             _pNode = _eraseNode(_list, _pNode);
             _flag++;
         }
@@ -340,26 +347,45 @@ ListSize eraseVal(List *_list, ElementType val){
 /// @brief finds an element inside a list 
 /// @param _list a pointer to the list
 /// @param _element element to be found
+/// @param equal_fun the equality function to compare against
 /// @return iterator pointing at the first occurrence of the element in the list if it's present, `NULL` otherwise
-ListIterator find(List *_list, ElementType _element){
-    ListIterator _h = _list -> _head, _t = _list -> _tail;
-    while(_h && _t){
-        if (!_comp(_h -> _val, &_element))
-            return _h;
-        if (!_comp(_t -> _val, &_element))
-            return _t;
-        _h = _h -> _next;
-        _t = _t -> _prev;
+ListIterator find(List *_list, 
+                  ElementType _element, 
+                  int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
+    Node *_H = _list -> _head, *_T = _list -> _tail;
+    ListSize _i = 0, _limit = _list -> _size / 2;
+    for (;_H && _T && _i <= _limit; _i++){
+        if (equal_fun(_H->_val, &_element))
+            return _H;
+        if (equal_fun(_T->_val, &_element))
+            return _T;
+        _H = _H -> _next;
+        _T = _T -> _prev;
     }
     return NULL;
 }
 /// @brief count the number of element occurrences in the list
 /// @param _list a pointer to the list
 /// @param _element element to be counted
+/// @param equal_fun the equality function to compare against
 /// @return number of elements matched 
-ListSize count(List *_list, ElementType _element){
-    __Val = _element;
-    return traverse_tailward(_list, _count);
+ListSize count(List *_list, 
+               ElementType _element, 
+               int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
+    ListSize _counter = 0;
+    Node *_H = _list -> _head, *_T = _list -> _tail;
+    ListSize _i = 0, _limit = _list -> _size / 2;
+    for (;_H && _T && _i < _limit; _i++){
+        if (equal_fun(_H->_val, &_element))
+            _counter++;
+        if (equal_fun(_T->_val, &_element))
+            _counter++;
+        _H = _H -> _next;
+        _T = _T -> _prev;
+    }
+    if (_i&1)
+        _counter += equal_fun(_T->_prev->_val, &_element);
+    return _counter;
 }
 /// @brief traverse the elements of the list with a special function (from Head to Tail)
 /// @param _list a pointer to the list
@@ -435,13 +461,16 @@ void swap(ListIterator _it1, ListIterator _it2){
 /// @brief compares two lists regarding number of elements and elements
 /// @param _list1 a pointer to the first list
 /// @param _list2 a pointer to the second list
+/// @param equal_fun the equality function to compare against
 /// @return `1` if both are identical, `0` otherwise
-int compare(List *_list1, List *_list2){
+int compare(List *_list1, 
+            List *_list2, 
+            int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
     if (_list1->_size != _list2->_size)
         return 0;
     Node *pl1 = _list1->_head, *pl2 = _list2->_head;
     while(pl1){
-        if (_comp(pl1->_val, pl2->_val))
+        if (!equal_fun(pl1->_val, pl2->_val))
             return 0;
         pl1 = pl1->_next,
         pl2 = pl2->_next;

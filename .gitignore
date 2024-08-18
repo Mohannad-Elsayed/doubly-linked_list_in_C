@@ -39,3 +39,5 @@ benchmark
 benchmark.c
 example
 example.c
+tmp.c
+tmp
