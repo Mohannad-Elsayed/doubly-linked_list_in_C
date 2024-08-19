@@ -1,19 +1,16 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
 
-test: test.c
-	$(CC) $(CFLAGS) -o test $^
-	valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./test
+all:
+	$(CC) $(CFLAGS) test.c -o bin/test $^
+	$(CC) $(CFLAGS) example.c -o bin/example $^
+	i686-w64-mingw32-gcc -o bin/test.exe test.c
+	i686-w64-mingw32-gcc -o bin/example.exe example.c
 
-example: example.c
-	$(CC) $(CFLAGS) -o example $^
-	./example
+test:
+	valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./bin/test
 
-benchmark: benchmark.c
-	$(CC) $(CFLAGS) -o benchmark $^
-	./benchmark
+example:
+	./bin/example
 
-clean:
-	rm -f test example tempCodeRunnerFile.c 
-
-.PHONY: all clean test example
+.PHONY: all test example
