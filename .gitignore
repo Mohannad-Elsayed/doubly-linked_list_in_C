@@ -33,10 +33,4 @@ node_modules/
 venv/
 vendor/
 
-test
 tempCodeRunnerFile.c
-benchmark
-benchmark.c
-example
-tmp.c
-tmp
