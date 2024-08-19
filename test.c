@@ -63,8 +63,7 @@ static void test__makeNode(void){
     assert(p -> _next == NULL);
     assert(p -> _prev == NULL);
 
-    free(p->_val);
-    free(p);
+    _freeNode(p);
 }
 static void test__insert(void){
     ElementType x = 1;
@@ -82,8 +81,7 @@ static void test__insert(void){
     assert(r -> _next == q);
     assert(q -> _prev == r);
 
-    free(p->_val); free(q->_val); free(r->_val);
-    free(p); free(q); free(r);
+    _freeNode(p); _freeNode(q); _freeNode(r);
 }
 static void test__swap(void){
     ElementType x = 0, y = 1;
@@ -346,8 +344,7 @@ static void test_val(void){
     assert(p);
     assert(val(p) == p->_val);
 
-    free(p->_val);
-    free(p);
+    _freeNode(p);
 }
 static void test_size(void){
     List lst;
