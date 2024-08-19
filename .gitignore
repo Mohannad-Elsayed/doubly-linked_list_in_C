@@ -6,7 +6,6 @@
 *.dll
 *.dylib
 
-bin/
 build/
 doubly_linked_list
 
