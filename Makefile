@@ -2,6 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 all:
+	rm -r bin
 	mkdir bin
 	$(CC) $(CFLAGS) test.c -o bin/test 
 	$(CC) $(CFLAGS) example.c -o bin/example 
