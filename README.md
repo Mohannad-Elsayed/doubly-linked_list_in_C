@@ -1,4 +1,4 @@
-# Doubly Linked List Implementation In C Documentation
+# Doubly Linked List Implementation In C: Documentation
 
 ## Introduction
 
@@ -29,7 +29,7 @@ Types breakdown:
     ```c
     typedef Node* ListIterator;
     ```
-  - `List`: It stores 2 pointers of type `Node*` to the head and the tail, also it stores the list current size.
+  - `List`: It stores 2 pointers of type `Node*` to the head and the tail, also it stores the list's current size.
     ```c
     typedef struct list {
     Node *_head;
@@ -45,7 +45,7 @@ To use this library, follow these steps:
     ```
 2.  **Implement Comparison Functions:** Implement functions to compare elements for equality and ordering, you can set more than compare function for the same purpose based on the context. You must define the macro `__compare_functions`.
   - Default comparison functions are basic integer comparisons.
-  - Signature of a comparison function should be:
+  - Prototype of a comparison function should be:
     ```c
       int fun(ElementType*, ElementType*);
     ```
@@ -63,11 +63,11 @@ To use this library, follow these steps:
       }
     ```
 3.  **Implement a printing and traversing function** Implement a function that only prints an element. Implement another function for traversing. Define macros `__printElement`, `__traverseFunction` respectively.
-  - Signature of a printing function should be:
+  - Prototype of a printing function should be:
     ```c
       void fun(ElementType*);
     ```
-  - Signature of a traversing function should be:
+  - Prototype of a traversing function should be:
     ```c
       int fun(ElementType*);
     ```
