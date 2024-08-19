@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <assert.h>
-#ifndef DOUBLY_LINKED_LIST_HEADER
-#define DOUBLY_LINKED_LIST_HEADER 1
+#ifndef DOUBLY_LINKED_LIST_H
+#define DOUBLY_LINKED_LIST_H 1
 
 
 /*      SHOULD BE DEFINED BY THE USER      */
@@ -62,8 +62,8 @@ static int _makeEqualWithVal(ElementTypePtr _E);
 static ListIterator _insert(Node *_pNode, ElementTypePtr _E);
 static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2);
 static ListIterator _makeNode(const ElementTypePtr _E);
+static void _freeNode(ListIterator _pNode);
 static ListIterator _eraseNode(List *_list, Node *_node);
-
 void create(List *_list);
 void clear(List *_list);
 
@@ -107,4 +107,4 @@ void printAllElements(List *_list, char *separator);
 void swap(ListIterator _it1, ListIterator _it2);
 int compare(List *_list1, List *_list2, int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2));
 
-#endif /* DOUBLY_LINKED_LIST_HEADER */
+#endif /* DOUBLY_LINKED_LIST_H */

@@ -72,6 +72,15 @@ static ListIterator _makeNode(const ElementTypePtr _E){
     _pNode -> _next = _pNode -> _prev = NULL;
     return _pNode;
 }
+/// @brief a helper function to free a node completely
+/// @param _pNode a pointer to the node
+static void _freeNode(ListIterator _pNode){
+    if (_pNode){
+        if (_pNode->_val)
+            free(_pNode->_val);
+        free(_pNode);
+    }
+}
 /// @brief helper function to erase an element in the list, decrement the size
 /// @param _list pointer to the list
 /// @param _node pointer to the element to be erased
@@ -88,9 +97,7 @@ static ListIterator _eraseNode(List *_list, Node *_node){
             _node -> _next -> _prev = _node -> _prev;
         else
             _list -> _tail = _node -> _prev;
-        free(_node -> _val);
-        _node -> _val = NULL;
-        free(_node);
+        _freeNode(_node);
         _node = NULL;
         _list -> _size--;
         return retNode;
@@ -280,10 +287,7 @@ ListIterator eraseHead(List *_list){
     }
     Node *_oldHead = _list -> _head;
     _list -> _head = _list -> _head -> _next;
-    free(_oldHead -> _val);
-    _oldHead -> _val = NULL;
-    free(_oldHead);
-    _oldHead = NULL;
+    _freeNode(_oldHead);
     _list -> _size--;
     if (!_list -> _size)
         return _list -> _head = _list -> _tail = NULL;
@@ -299,10 +303,7 @@ ListIterator eraseTail(List *_list){
     }
     Node *_oldTail = _list -> _tail;
     _list -> _tail = _list -> _tail -> _prev;
-    free(_oldTail -> _val);
-    _oldTail -> _val = NULL;
-    free(_oldTail);
-    _oldTail = NULL;
+    _freeNode(_oldTail);
     _list -> _size--;
     if (!_list -> _size)
         return _list -> _head = _list -> _tail = NULL;
