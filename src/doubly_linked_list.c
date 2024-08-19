@@ -59,10 +59,10 @@ static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
 /// @param _E data inside the node
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
 static ListIterator _makeNode(const ElementTypePtr _E){
-    Node *_pNode = (Node*)malloc(sizeof(Node));
+    Node *_pNode = malloc(sizeof(Node));
     if (_pNode == NULL)
         return NULL;
-    ElementTypePtr __val = (ElementTypePtr)malloc(sizeof(ElementType));
+    ElementTypePtr __val = malloc(sizeof(ElementType));
     if (__val == NULL){
         free(_pNode); 
         return NULL;
