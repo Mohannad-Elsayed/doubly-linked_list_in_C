@@ -5,7 +5,7 @@
 #include <math.h>
 
 #define test(fn) \
-    printf("Testing: \x1b[33m" # fn "()\x1b[0m\n"); \
+    printf("Testing: " # fn "()\n"); \
     test_##fn(); // call the test function
 
 #define ElementType long long

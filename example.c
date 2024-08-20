@@ -45,7 +45,8 @@ int _traverseFunction(ElementType *_E){
 
 int id = 1;
 
-#define printy(x) printf("\x1b[33m"#x"\x1b[0m\n");
+#define printy(x) printf("\n-=-=-=-=--=-=-=-=--=-=-=-=-\n" \
+                        #x"\n-=-=-=-=--=-=-=-=--=-=-=-=-\n");
 
 ElementType makeEmployee(
     char* name, 
@@ -76,108 +77,108 @@ int main(){
     addTail(&Employees, makeEmployee("Abdulrahman", 9000, 9, 10, 2003, 1));
     addHead(&Employees, makeEmployee("Mohab Salama", 12000, 14, 8, 2000, 1));
     addTail(&Employees, makeEmployee("Yara Mahgoub", 5400, 19, 4, 1999, 0));
-    printf("\x1b[33mAdded 7 employees\x1b[0m\n");
+    printf("Added 7 employees\n");
     printAllElements(&Employees, "\n");
 
 
-    // eraseHead(&Employees);
-    // printy(Erased Head);
-    // printAllElements(&Employees, "\n");
+    eraseHead(&Employees);
+    printy(Erased Head);
+    printAllElements(&Employees, "\n");
 
 
-    // eraseTail(&Employees);
-    // printy(Erased Tail);
-    // printAllElements(&Employees, "\n");
+    eraseTail(&Employees);
+    printy(Erased Tail);
+    printAllElements(&Employees, "\n");
 
 
-    // insertAt(&Employees, makeEmployee("Haneen", 4900, 23, 4, 1997, 0), 3);
-    // printy(Haneen inserted at index 3);
-    // printAllElements(&Employees, "\n");
+    insertAt(&Employees, makeEmployee("Haneen", 4900, 23, 4, 1997, 0), 3);
+    printy(Haneen inserted at index 3);
+    printAllElements(&Employees, "\n");
 
 
-    // ListIterator h = head(&Employees), t = tail(&Employees), thindex = at(&Employees, 3);
-    // insertAfter(&Employees, makeEmployee("Ramdan", 3000, 23, 4, 1997, 0), thindex);
-    // printy(Ramdan inserted after the third index);
-    // printAllElements(&Employees, "\n");
+    ListIterator h = head(&Employees), t = tail(&Employees), thindex = at(&Employees, 3);
+    insertAfter(&Employees, makeEmployee("Ramdan", 3000, 23, 4, 1997, 0), thindex);
+    printy(Ramdan inserted after the third index);
+    printAllElements(&Employees, "\n");
 
 
-    // printy(Size of the List); printf("%lld\n", size(&Employees));
-    // printy(Value at index 5); _printElement(val(at(&Employees, 5)));
-    // printy(Value at index 0); _printElement(val(at(&Employees, 0)));
-    // printy(Value at index -1); _printElement(val(at(&Employees, -1)));
-    // printy(Value at index -4); _printElement(val(at(&Employees, -4)));
-    // printy(Value at index -7); _printElement(val(at(&Employees, -7)));
+    printy(Size of the List); printf("%lld\n", size(&Employees));
+    printy(Value at index 5); _printElement(val(at(&Employees, 5)));
+    printy(Value at index 0); _printElement(val(at(&Employees, 0)));
+    printy(Value at index -1); _printElement(val(at(&Employees, -1)));
+    printy(Value at index -4); _printElement(val(at(&Employees, -4)));
+    printy(Value at index -7); _printElement(val(at(&Employees, -7)));
 
-    // clear(&Employees);
-    // printy(List is cleared and the new size is);
-    // printf("%lld\n", size(&Employees));
-
-
-    // addHead(&Employees, randEmp("Ahmed", 1));
-    // addHead(&Employees, randEmp("Osama", 1));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // addHead(&Employees, randEmp("Sameh", 1));
-    // addHead(&Employees, randEmp("Ehab", 1));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // addHead(&Employees, randEmp("Eshraq", 0));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // addHead(&Employees, randEmp("Rana", 0));
-    // addHead(&Employees, randEmp("Sohair", 0));
-    // printy(Added 10 random employees);
-    // printAllElements(&Employees, "\n");
+    clear(&Employees);
+    printy(List is cleared and the new size is);
+    printf("%lld\n", size(&Employees));
 
 
-    // thindex = at(&Employees, 3);
-    // erase(&Employees, thindex);
-    // printy(Erased the Employee at index 3);
-    // printAllElements(&Employees, "\n");
+    addHead(&Employees, randEmp("Ahmed", 1));
+    addHead(&Employees, randEmp("Osama", 1));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    addHead(&Employees, randEmp("Sameh", 1));
+    addHead(&Employees, randEmp("Ehab", 1));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    addHead(&Employees, randEmp("Eshraq", 0));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    addHead(&Employees, randEmp("Rana", 0));
+    addHead(&Employees, randEmp("Sohair", 0));
+    printy(Added 10 random employees);
+    printAllElements(&Employees, "\n");
+
+
+    thindex = at(&Employees, 3);
+    erase(&Employees, thindex);
+    printy(Erased the Employee at index 3);
+    printAllElements(&Employees, "\n");
     
     
-    // eraseVal(&Employees, (ElementType){15}, equalids);
-    // printy(Erased employee with id 15);
-    // printAllElements(&Employees, "\n");
+    eraseVal(&Employees, (ElementType){15}, equalids);
+    printy(Erased employee with id 15);
+    printAllElements(&Employees, "\n");
 
 
-    // eraseVal(&Employees, (ElementType){15, "Mohamed"}, equal_names);
-    // printy(Erased employee with name Mohamed);
-    // printAllElements(&Employees, "\n");
+    eraseVal(&Employees, (ElementType){15, "Mohamed"}, equal_names);
+    printy(Erased employee with name Mohamed);
+    printAllElements(&Employees, "\n");
 
 
-    // addHead(&Employees, randEmp("Ahmed", 1));
-    // addHead(&Employees, randEmp("Osama", 1));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // addHead(&Employees, randEmp("Sameh", 1));
-    // addHead(&Employees, randEmp("Ehab", 1));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // addHead(&Employees, randEmp("Eshraq", 0));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // addHead(&Employees, randEmp("Rana", 0));
-    // addHead(&Employees, randEmp("Mohamed", 1));
-    // printy(Added 10 random employees);
-    // printAllElements(&Employees, "\n");
+    addHead(&Employees, randEmp("Ahmed", 1));
+    addHead(&Employees, randEmp("Osama", 1));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    addHead(&Employees, randEmp("Sameh", 1));
+    addHead(&Employees, randEmp("Ehab", 1));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    addHead(&Employees, randEmp("Eshraq", 0));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    addHead(&Employees, randEmp("Rana", 0));
+    addHead(&Employees, randEmp("Mohamed", 1));
+    printy(Added 10 random employees);
+    printAllElements(&Employees, "\n");
 
 
-    // ListSize counter = count(&Employees, makeEmployee("Mohamed", 0, 0, 0, 0, 0), equal_names);
-    // printy(Count number of Employees with name Mohamed);
-    // printf("%lld\n", counter);
+    ListSize counter = count(&Employees, makeEmployee("Mohamed", 0, 0, 0, 0, 0), equal_names);
+    printy(Count number of Employees with name Mohamed);
+    printf("%lld\n", counter);
 
 
-    // printy(Print employee with id number 13);
-    // _printElement(find(&Employees, (ElementType){13}, equalids)->_val);
+    printy(Print employee with id number 13);
+    _printElement(find(&Employees, (ElementType){13}, equalids)->_val);
 
 
-    // swap(find(&Employees, (ElementType){10}, equalids), find(&Employees, (ElementType){19}, equalids));
-    // printy(Swaped Id 10 with Id 19);
-    // printAllElements(&Employees, "\n");
+    swap(find(&Employees, (ElementType){10}, equalids), find(&Employees, (ElementType){19}, equalids));
+    printy(Swaped Id 10 with Id 19);
+    printAllElements(&Employees, "\n");
 
 
-    // reverse(&Employees);
-    // printy(Reversed the List);
-    // printAllElements(&Employees, "\n");
+    reverse(&Employees);
+    printy(Reversed the List);
+    printAllElements(&Employees, "\n");
 
-    // fill(&Employees, (ElementType){12, "Saleh"});
-    // printy(Filled the list with id 12 and name Saleh);
-    // printAllElements(&Employees, "\n");
+    fill(&Employees, (ElementType){12, "Saleh"});
+    printy(Filled the list with id 12 and name Saleh);
+    printAllElements(&Employees, "\n");
 
     
     clear(&Employees);
