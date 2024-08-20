@@ -1,3 +1,8 @@
+#ifndef DOUBLY_LINKED_LIST_IMPL
+#define DOUBLY_LINKED_LIST_IMPL 1
+
+#include "doubly_linked_list.h"
+
 /// @brief initializes the list pointers to `NULL` and the list size to 0
 /// @param _list a pointer to the list
 void create(List *_list){
@@ -297,3 +302,5 @@ void reverse(List *_list){
 }
 
 
+
+#endif /* DOUBLY_LINKED_LIST_IMPL */
