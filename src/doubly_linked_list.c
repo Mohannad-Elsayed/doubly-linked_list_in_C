@@ -55,7 +55,7 @@ static void _swap(ElementTypePtr *_E1, ElementTypePtr *_E2){
     *_E1 = *_E2;
     *_E2 = _T;
 }
-/// @brief helper function to make a node and assign its value
+/// @brief helper function to allocate memory for the element and the node and assign the value
 /// @param _E data inside the node
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
 static ListIterator _makeNode(const ElementTypePtr _E){
@@ -72,14 +72,14 @@ static ListIterator _makeNode(const ElementTypePtr _E){
     _pNode -> _next = _pNode -> _prev = NULL;
     return _pNode;
 }
-/// @brief a helper function to free a node completely
+/// @brief a helper function to free a node with its data
 /// @param _pNode a pointer to the node
 static void _freeNode(ListIterator _pNode){
-    if (_pNode){
-        if (_pNode->_val)
-            free(_pNode->_val);
-        free(_pNode);
-    }
+    // if (_pNode){
+    //     if (_pNode->_val)
+    //         free(_pNode->_val);
+    //     free(_pNode);
+    // }
 }
 /// @brief helper function to erase an element in the list, decrement the size
 /// @param _list pointer to the list
@@ -98,7 +98,6 @@ static ListIterator _eraseNode(List *_list, Node *_node){
         else
             _list -> _tail = _node -> _prev;
         _freeNode(_node);
-        _node = NULL;
         _list -> _size--;
         return retNode;
     }
@@ -349,7 +348,7 @@ ListSize eraseVal(List *_list,
 /// @param _list a pointer to the list
 /// @param _element element to be found
 /// @param equal_fun the equality function to compare against
-/// @return iterator pointing at the first occurrence of the element in the list if it's present, `NULL` otherwise
+/// @return iterator pointing at the element in the list if it's present, `NULL` otherwise
 ListIterator find(List *_list, 
                   ElementType _element, 
                   int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
