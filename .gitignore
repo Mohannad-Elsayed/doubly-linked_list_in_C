@@ -33,7 +33,5 @@ venv/
 vendor/
 
 tempCodeRunnerFile.c
-test
-example
 string-palindrome-example
 tmp/
