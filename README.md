@@ -85,6 +85,10 @@ To use this library, follow these steps:
         return 0;
       }
     ```
+4. Include the file `"src/doubly_linked_list.c"`.
+  ```c
+    #include "src/doubly_linked_list.c"
+  ```
 Now you can use `List` type to declare new lists.
 ## Interface:
 **Passing the list to the functions is always by reference**
@@ -318,6 +322,7 @@ Now you can use `List` type to declare new lists.
       ```c
         int result = compare(&list1, &list2, equalFunction);
       ```  
+
 ## Example
 Below is an example of using the list to store some data about some people.
   ```c
@@ -376,13 +381,18 @@ Name: Salma
         Age: 22
         Gender: Female
 ```
+
 ## Testing
 ```bash
+make
 make test
 ```
+
 ## Challenges
-	- Only one type allowed in the program. 
-	- Not circular
-	- Lacking sort function
-	- Not fully generic, can't use multiple lists of different data types in one program
-  	- ...
+  - Only one type allowed in the program. 
+  - Not circular
+  - Lacking sort function
+  - Not fully generic, can't use multiple lists of different data types in one program
+  - Better implementation exists
+  - You name it…
+
