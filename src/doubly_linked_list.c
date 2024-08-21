@@ -75,11 +75,11 @@ static ListIterator _makeNode(const ElementTypePtr _E){
 /// @brief a helper function to free a node with its data
 /// @param _pNode a pointer to the node
 static void _freeNode(ListIterator _pNode){
-    // if (_pNode){
-    //     if (_pNode->_val)
-    //         free(_pNode->_val);
-    //     free(_pNode);
-    // }
+    if (_pNode){
+        if (_pNode->_val)
+            free(_pNode->_val);
+        free(_pNode);
+    }
 }
 /// @brief helper function to erase an element in the list, decrement the size
 /// @param _list pointer to the list
