@@ -27,19 +27,19 @@ typedef struct compare_struct {
 } CompareStruct;
 CompareStruct compareInt = {equal, greater, smaller};
 #endif /* __compare_functions */
+#ifndef __traverseFunction
+#define __traverseFunction
+int _traverseFunction(ElementType *_E){
+    printf("%d ", *_E);
+    return 0;
+}
+#endif /* __traverseFunction */
 #ifndef __printElement
 #define __printElement
 void _printElement(ElementType *_E){
     printf("%d", *_E);
 }
 #endif /* __printElement */
-#ifndef __traverseFunction
-#define __traverseFunction
-int _traverseFunction(ElementType *_E){
-    _printElement(_E);
-    return 0;
-}
-#endif /* __traverseFunction */
 /*  END SHOULD BE DEFINED BY THE USER      */
 
 typedef unsigned long long ListSize;
