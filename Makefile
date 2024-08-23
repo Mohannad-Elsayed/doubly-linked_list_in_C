@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 all:
-	rm -r bin || mkdir bin
+	rm -r bin; mkdir bin
 	$(CC) $(CFLAGS) test.c -o bin/test 
 	$(CC) $(CFLAGS) example.c -o bin/example 
 	x86_64-w64-mingw32-gcc -o bin/test-64.exe test.c
