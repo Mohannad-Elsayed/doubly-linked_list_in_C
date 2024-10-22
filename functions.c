@@ -1,7 +1,21 @@
-#ifndef DOUBLY_LINKED_LIST_IMPL
-#define DOUBLY_LINKED_LIST_IMPL 1
+#include <stdio.h>
 
 #include "doubly_linked_list.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /// @brief initializes the list pointers to `NULL` and the list size to 0
 /// @param _list a pointer to the list
@@ -12,14 +26,24 @@ void create(List *_list){
 }
 
 
-/// @brief helper function to make a node and assign its value
+
+
+
+
+
+
+
+
+
+
+/// @brief helper function to allocate memory for the element and the node and assign the value
 /// @param _E data inside the node
 /// @return a pointer to the node created in case of successful creation, `NULL` otherwise
 static ListIterator _makeNode(const ElementTypePtr _E){
-    Node *_pNode = (Node*)malloc(sizeof(Node));
+    Node *_pNode = malloc(sizeof(Node));
     if (_pNode == NULL)
         return NULL;
-    ElementTypePtr __val = (ElementTypePtr)malloc(sizeof(ElementType));
+    ElementTypePtr __val = malloc(sizeof(ElementType));
     if (__val == NULL){
         free(_pNode); 
         return NULL;
@@ -29,6 +53,15 @@ static ListIterator _makeNode(const ElementTypePtr _E){
     _pNode -> _next = _pNode -> _prev = NULL;
     return _pNode;
 }
+
+
+
+
+
+
+
+
+
 
 
 /// @brief appends an element to the start (Head side) of the list
@@ -52,6 +85,34 @@ ListIterator addHead(List *_list, ElementType val){
     }
     return NULL;
 }
+
+
+
+
+/// @brief appends an element to the end (Tail side) of the list
+/// @param _list a pointer to the list
+/// @param val the value to be added
+/// @return an iterator to the element in success addition, `NULL` in failure
+// TODO make ElementType reference type
+ListIterator addTail(List *_list, ElementType val){
+    Node *_newTail = _makeNode(&val);
+    if (_newTail){
+        Node *_oldTail = _list -> _tail;
+        _list -> _tail = _newTail;
+        _newTail -> _prev = _oldTail;
+        _newTail -> _next = NULL;
+        if (_oldTail)
+            _oldTail -> _next = _newTail;
+        else
+            _list -> _head = _newTail;
+        _list -> _size++;
+        return _newTail;
+    }
+    return NULL;
+}
+
+
+
 
 
 /// @brief get an iterator pointing at the element in the specified index, including negative indexing
@@ -91,6 +152,8 @@ static ListIterator _insert(Node *_fixedNode, ElementTypePtr _E){
 }
 
 
+
+
 /// @brief insert an element in the specified index (zero-based)
 /// @param _list a pointer to the list
 /// @param _element element to be inserted
@@ -112,6 +175,8 @@ ListIterator insertAt(List *_list, ElementType _element, signed _index){
 }
 
 
+
+
 /// @brief a function to insert a node after a specified node in a list
 /// @param _list a pointer to the list
 /// @param _element the element to be inserted
@@ -123,6 +188,8 @@ ListIterator insertAfter(List *_list, ElementType _element, ListIterator _it){
     }
     return _list -> _size++, _insert(_it, &_element);
 }
+
+
 
 
 /// @brief append all elements in `source` to the Tail of `destination`
@@ -150,7 +217,9 @@ void prepend(List *source, List *destination){
 }
 
 
-/// @brief a helper function to free a node completely
+
+
+/// @brief a helper function to free a node with its data
 /// @param _pNode a pointer to the node
 static void _freeNode(ListIterator _pNode){
     if (_pNode){
@@ -159,6 +228,8 @@ static void _freeNode(ListIterator _pNode){
         free(_pNode);
     }
 }
+
+
 
 
 /// @brief erases the Head element in the list (the left most element)
@@ -179,6 +250,8 @@ ListIterator eraseHead(List *_list){
 }
 
 
+
+
 /// @brief helper function to erase an element in the list, decrement the size
 /// @param _list pointer to the list
 /// @param _node pointer to the element to be erased
@@ -196,12 +269,14 @@ static ListIterator _eraseNode(List *_list, Node *_node){
         else
             _list -> _tail = _node -> _prev;
         _freeNode(_node);
-        _node = NULL;
         _list -> _size--;
         return retNode;
     }
     return NULL;
 }
+
+
+
 
 
 /// @brief erases all occurrences of a particular value from te list
@@ -226,11 +301,13 @@ ListSize eraseVal(List *_list,
 }
 
 
+
+
 /// @brief finds an element inside a list 
 /// @param _list a pointer to the list
 /// @param _element element to be found
 /// @param equal_fun the equality function to compare against
-/// @return iterator pointing at the first occurrence of the element in the list if it's present, `NULL` otherwise
+/// @return iterator pointing at the element in the list if it's present, `NULL` otherwise
 ListIterator find(List *_list, 
                   ElementType _element, 
                   int equal_fun(ElementTypePtr _E1, ElementTypePtr _E2)){
@@ -246,6 +323,8 @@ ListIterator find(List *_list,
     }
     return NULL;
 }
+
+
 
 
 
@@ -274,6 +353,12 @@ ListSize count(List *_list,
 }
 
 
+
+
+
+
+
+
 /// @brief traverse the elements of the list with a special function (from Head to Tail)
 /// @param _list a pointer to the list
 /// @param _pfun function pointer that do work on the elements inside list nodes
@@ -287,6 +372,9 @@ ListSize traverse_tailward(List *_list, int _pfun(ElementTypePtr _E)){
     }
     return result;
 }
+
+
+
 
 
 /// @brief reverse the list in-place
@@ -303,4 +391,7 @@ void reverse(List *_list){
 
 
 
-#endif /* DOUBLY_LINKED_LIST_IMPL */
+
+
+
+
